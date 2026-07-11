@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Birthday Surprise </title>
+
+<!-- <link rel="stylesheet" href="style.css"> -->
+
+<style>
+    *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    background:#850019;
+
+    font-family:Arial, Helvetica, sans-serif;
+
+    height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    overflow:hidden;
+
+}
+
+#loading-screen{
+
+    text-align:center;
+
+    color:white;
+
+}
+
+.heart{
+
+    font-size:60px;
+
+    animation:pulse 1s infinite;
+
+}
+
+h1{
+
+    margin-top:20px;
+
+    font-size:42px;
+
+    font-weight:normal;
+
+}
+
+p{
+
+    margin-top:10px;
+
+    color:#ffd5d5;
+
+}
+
+.progress{
+
+    width:300px;
+
+    height:10px;
+
+    background:rgba(255,255,255,.2);
+
+    margin:40px auto;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+}
+
+.progress-bar{
+
+    width:0%;
+
+    height:100%;
+
+    background:white;
+
+    animation:loading 4s linear forwards;
+
+}
+
+@keyframes loading{
+
+    from{
+
+        width:0%;
+
+    }
+
+    to{
+
+        width:100%;
+
+    }
+
+}
+
+@keyframes pulse{
+
+    0%{
+
+        transform:scale(1);
+
+    }
+
+    50%{
+
+        transform:scale(1.2);
+
+    }
+
+    100%{
+
+        transform:scale(1);
+
+    }
+
+}
+
+#loading-screen,
+#passcode-screen{
+
+    position:absolute;
+
+    width:100%;
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    transition:1s;
+
+}
+
+#passcode-screen{
+
+    opacity:0;
+
+    visibility:hidden;
+
+}
+
+#passcode-screen h2{
+    color:white;
+    margin-bottom:30px;
+}
+
+#dots{
+    display:flex;
+    gap:15px;
+    margin-bottom:40px;
+}
+
+.dot{
+    width:18px;
+    height:18px;
+    border:2px solid white;
+    border-radius:50%;
+    transition:.3s;
+}
+
+.dot.filled{
+    background:white;
+}
+
+.keypad{
+    display:grid;
+    grid-template-columns:repeat(3,80px);
+    gap:15px;
+}
+
+.keypad button{
+
+    width:80px;
+    height:80px;
+
+    border:none;
+
+    border-radius:50%;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+    background:rgba(255,255,255,.15);
+
+    color:white;
+
+    transition:.25s;
+
+    backdrop-filter:blur(8px);
+}
+
+.keypad button:hover{
+
+    background:white;
+    color:#850019;
+}
+
+.shake{
+
+    animation:shake .4s;
+}
+
+@keyframes shake{
+
+0%{transform:translateX(0);}
+20%{transform:translateX(-10px);}
+40%{transform:translateX(10px);}
+60%{transform:translateX(-10px);}
+80%{transform:translateX(10px);}
+100%{transform:translateX(0);}
+
+}
+
+/* Unlock Screen */
+
+#unlock-screen{
+
+    position:absolute;
+    width:100%;
+    height:100%;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    background:radial-gradient(circle,#b10024,#5a0012);
+
+    color:white;
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:0.8s;
+}
+
+.unlock-heart{
+
+    font-size:70px;
+    animation:pulse 1s infinite;
+}
+
+#unlock-screen h1{
+
+    margin-top:20px;
+    font-size:42px;
+}
+
+#unlock-screen p{
+
+    margin-top:15px;
+    color:#ffdede;
+    font-size:20px;
+}
+
+/* Envelope Screen */
+
+#envelope-screen{
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-direction:column;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:1s;
+
+}
+
+
+
+
+/* Letter */
+
+.letter{
+
+    position:absolute;
+
+    width:260px;
+
+    height:170px;
+
+    background:white;
+
+    left:30px;
+
+    top:25px;
+
+    border-radius:8px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    transition:1s;
+
+    z-index:2;
+
+    color:#d6004f;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+
+}
+
+
+/* Bottom */
+
+.bottom{
+
+    position:absolute;
+
+    width:100%;
+
+    height:100%;
+
+    background:#ff4d6d;
+
+    border-radius:10px;
+
+    z-index:2;
+
+}
+
+/* Left Fold */
+
+.left{
+
+    position:absolute;
+
+    width:0;
+
+    height:0;
+
+    border-top:110px solid transparent;
+
+    border-bottom:110px solid transparent;
+
+    border-left:160px solid #ff7591;
+
+    z-index:3;
+
+}
+
+/* Right Fold */
+
+.right{
+
+    position:absolute;
+
+    right:0;
+
+    width:0;
+
+    height:0;
+
+    border-top:110px solid transparent;
+
+    border-bottom:110px solid transparent;
+
+    border-right:160px solid #ff7591;
+
+    z-index:3;
+
+}
+
+/* Top Flap */
+
+.flap{
+
+    position:absolute;
+
+    width:100%;
+
+    height:110px;
+
+    background:#ff8fa3;
+
+    clip-path:polygon(0 0,100% 0,50% 100%);
+
+    transform-origin:top;
+
+    transition:1s;
+
+    z-index:5;
+
+}
+
+/* Hover */
+
+.envelope:hover{
+
+    transform:translateY(-8px);
+
+    transition:.4s;
+
+}
+.envelope{
+
+    position:relative;
+    width:320px;
+    height:220px;
+
+    cursor:pointer;
+
+}
+
+/* Open animation */
+
+.envelope.open .top{
+
+    transform:rotateX(180deg);
+
+}
+
+.envelope.open .letter{
+
+    transform:translateY(-140px);
+
+}
+
+.envelope{
+    animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+
+    0%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-10px);
+    }
+
+    100%{
+        transform:translateY(0);
+    }
+
+}
+
+/* ========================= */
+/* Birthday Letter */
+/* ========================= */
+
+#letter-screen{
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:linear-gradient(135deg,#ffdde1,#ee9ca7);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:1s;
+
+}
+
+.birthday-letter{
+
+    width:650px;
+
+    max-width:90%;
+
+    background:white;
+
+    padding:40px;
+
+    border-radius:20px;
+
+    text-align:center;
+
+    box-shadow:0 20px 40px rgba(0,0,0,.25);
+
+}
+
+.birthday-letter h1{
+
+    color:#e91e63;
+
+    margin-bottom:30px;
+
+}
+
+#typing-text{
+
+    color:#444;
+
+    line-height:1.8;
+
+    min-height:220px;
+
+    text-align:left;
+
+}
+
+.birthday-letter button{
+
+    margin-top:30px;
+
+    padding:15px 35px;
+
+    border:none;
+
+    border-radius:40px;
+
+    background:#e91e63;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+}
+
+/* Gallery Screen */
+
+#gallery-screen{
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:linear-gradient(135deg,#ffdde1,#ee9ca7);
+
+    color:#d81b60;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:1s;
+
+}
+
+.gallery{
+
+    width:400px;
+
+    background:white;
+
+    padding:15px 15px 60px 15px;
+
+    border-radius:10px;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.3);
+
+}
+
+.gallery img{
+
+    width:100%;
+
+    height:450px;
+
+    object-fit:cover;
+
+    border-radius:5px;
+
+}
+
+
+
+.controls{
+
+    display:flex;
+
+    gap:30px;
+
+    align-items:center;
+
+    margin-top:35px;
+
+}
+
+.controls button{
+
+    width:60px;
+
+    height:60px;
+
+    border:none;
+
+    border-radius:50%;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+    background:#ff4d88;
+
+    color:white;
+
+    transition:.3s;
+
+}
+
+.controls button:hover{
+
+    transform:scale(1.1);
+
+}
+
+
+
+#typing-text{
+    white-space: pre-line;
+}
+
+.special-photo{
+
+    object-position: top;
+
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- Loading Screen -->
+<div id="loading-screen">
+
+    <div class="heart">💌</div>
+
+    <h1>Hey Binal...</h1>
+
+    <p>Preparing your surprise...</p>
+
+    <div class="progress">
+        <div class="progress-bar"></div>
+    </div>
+
+</div>
+
+<!-- Passcode Screen -->
+<div id="passcode-screen">
+
+    <h2>Enter Passcode</h2>
+
+    <div id="dots">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div>
+
+    <div class="keypad">
+
+        <button onclick="press(1)">1</button>
+        <button onclick="press(2)">2</button>
+        <button onclick="press(3)">3</button>
+
+        <button onclick="press(4)">4</button>
+        <button onclick="press(5)">5</button>
+        <button onclick="press(6)">6</button>
+
+        <button onclick="press(7)">7</button>
+        <button onclick="press(8)">8</button>
+        <button onclick="press(9)">9</button>
+
+        <button onclick="clearPass()">CLR</button>
+        <button onclick="press(0)">0</button>
+        <button onclick="backspace()">⌫</button>
+
+    </div>
+
+</div>
+
+<!-- Unlock Screen -->
+<div id="unlock-screen">
+
+    <div class="unlock-heart">❤️</div>
+
+    <h1>Welcome Cold Coffee with Chocalate Ice-Cream...</h1>
+
+    <p>Unlocking your surprise...</p>
+
+</div>
+
+<!-- Envelope Screen -->
+
+<!-- Envelope Screen -->
+<div id="envelope-screen">
+
+    <div class="envelope" onclick="openEnvelope()">
+
+        <!-- Letter -->
+        <div class="letter">
+
+            <h2>💌</h2>
+            <p>For Binal ❤️</p>
+
+        </div>
+
+        <!-- Flap -->
+        <div class="flap"></div>
+
+        <!-- Left Fold -->
+        <div class="left"></div>
+
+        <!-- Right Fold -->
+        <div class="right"></div>
+
+        <!-- Bottom -->
+        <div class="bottom"></div>
+
+    </div>
+
+</div>
+
+<!-- Letter Screen -->
+
+<div id="letter-screen">
+
+    <div class="birthday-letter">
+
+        <h1>Happy Birthday Binal ❤️</h1>
+
+        <p id="typing-text"></p>
+
+        <button onclick="showGallery()">
+            Continue ❤️
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+  const message = `Dear Binal,
+
+Happy Birthday! 🎂❤️
+
+May this new chapter of your life bring confidence, success
+and countless reasons to smile.
+
+Stay kind, work hard and keep chasing your dreams.
+
+Wishing you good health, happiness and a bright future.
+
+Have a wonderful birthday!✨
+
+Made with ❤️
+by Aditi
+for Binal`;
+
+
+
+let i=0;
+
+function typeLetter(){
+
+    const text=document.getElementById("typing-text");
+
+    text.innerHTML="";
+
+    i=0;
+
+    const typing=setInterval(()=>{
+
+        text.innerHTML+=message.charAt(i);
+
+        i++;
+
+        if(i>=message.length){
+
+            clearInterval(typing);
+
+        }
+
+    },35);
+
+}
+</script>
+
+<!-- Gallery Screen -->
+
+<div id="gallery-screen">
+
+    <h1>💖 Celebrating You 💖</h1>
+
+    <div class="gallery">
+
+         <!-- <div class="placeholder">
+        📷
+        <p>Add Your Favorite Photo</p>
+    </div> -->
+
+    <img id="gallery-image" src="images/photo1.jpg">
+
+
+        
+
+    </div>
+
+    <div class="controls">
+
+        <button onclick="previousPhoto()">◀</button>
+
+        <span id="counter">
+            1 / 6
+        </span>
+
+        <button onclick="nextPhoto()">▶</button>
+
+    </div>
+
+</div>
+
+
+
+<!-- <script src="script.js"></script> -->
+<script>
+    // ---------------- Loading Screen ----------------
+
+setTimeout(() => {
+
+    document.getElementById("loading-screen").style.opacity = "0";
+    document.getElementById("loading-screen").style.visibility = "hidden";
+
+    document.getElementById("passcode-screen").style.opacity = "1";
+    document.getElementById("passcode-screen").style.visibility = "visible";
+
+}, 4000);
+
+
+// ---------------- Passcode ----------------
+
+const correctPass = "140704";
+let entered = "";
+
+function press(num){
+
+    if(entered.length >= 6) return;
+
+    entered += num;
+
+    updateDots();
+
+    if(entered.length === 6){
+
+        if(entered === correctPass){
+
+            document.getElementById("passcode-screen").style.opacity = "0";
+            document.getElementById("passcode-screen").style.visibility = "hidden";
+
+            document.getElementById("unlock-screen").style.opacity = "1";
+            document.getElementById("unlock-screen").style.visibility = "visible";
+
+            setTimeout(()=>{
+
+                document.getElementById("unlock-screen").style.opacity = "0";
+                document.getElementById("unlock-screen").style.visibility = "hidden";
+
+                document.getElementById("envelope-screen").style.opacity = "1";
+                document.getElementById("envelope-screen").style.visibility = "visible";
+
+            },1500);
+
+        }else{
+
+            entered = "";
+
+            updateDots();
+
+            document.getElementById("passcode-screen").classList.add("shake");
+
+            setTimeout(()=>{
+
+                document.getElementById("passcode-screen").classList.remove("shake");
+
+            },400);
+
+        }
+
+    }
+
+}
+
+function updateDots(){
+
+    const dots=document.querySelectorAll(".dot");
+
+    dots.forEach((dot,index)=>{
+
+        if(index<entered.length){
+
+            dot.classList.add("filled");
+
+        }else{
+
+            dot.classList.remove("filled");
+
+        }
+
+    });
+
+}
+
+function clearPass(){
+
+    entered="";
+
+    updateDots();
+
+}
+
+function backspace(){
+
+    entered=entered.slice(0,-1);
+
+    updateDots();
+
+}
+
+
+// ---------------- Envelope ----------------
+
+function openEnvelope(){
+
+    const flap=document.querySelector(".flap");
+    const letter=document.querySelector(".letter");
+
+    flap.style.transform="rotateX(180deg)";
+
+    setTimeout(()=>{
+
+        letter.style.transform="translateY(-140px)";
+
+    },400);
+
+    setTimeout(()=>{
+
+        document.getElementById("envelope-screen").style.opacity="0";
+        document.getElementById("envelope-screen").style.visibility="hidden";
+
+        document.getElementById("letter-screen").style.opacity="1";
+        document.getElementById("letter-screen").style.visibility="visible";
+
+        typeLetter();
+
+    },2500);
+
+}
+
+
+// ---------------- Letter ----------------
+
+function showGallery(){
+
+    document.getElementById("letter-screen").style.opacity="0";
+    document.getElementById("letter-screen").style.visibility="hidden";
+
+    setTimeout(()=>{
+
+        document.getElementById("gallery-screen").style.opacity="1";
+        document.getElementById("gallery-screen").style.visibility="visible";
+
+        current=0;
+
+        updateGallery();
+
+    },500);
+
+}
+
+
+// ---------------- Gallery ----------------
+
+const photos=[
+
+    "images/photo1.jpg",
+    "images/photo2.jpg",
+    "images/photo3.jpg",
+    "images/photo4.jpg",
+    "images/photo5.jpg",
+    "images/photo6.jpg"
+
+];
+
+let current=0;
+
+function updateGallery(){
+
+    const img = document.getElementById("gallery-image");
+
+    img.src = photos[current];
+
+    // Remove special class first
+    img.classList.remove("special-photo");
+
+    // Apply special style only for photo5.jpg
+    if(current === 4){
+        img.classList.add("special-photo");
+    }
+
+    document.getElementById("counter").innerHTML =
+        (current + 1) + " / " + photos.length;
+
+}
+
+function nextPhoto(){
+
+    current++;
+
+    if(current>=photos.length){
+
+        current=0;
+
+    }
+
+    updateGallery();
+
+}
+
+function previousPhoto(){
+
+    current--;
+
+    if(current<0){
+
+        current=photos.length-1;
+
+    }
+
+    updateGallery();
+
+}
+</script>
+
+</body>
+</html>
